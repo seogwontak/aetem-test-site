@@ -322,7 +322,7 @@
 
     function handleServerTypeSelect() {
         const ipInput = document.getElementById('localAddress');
-        const serverTypeSelect = document.getElementById('serverType');
+        const serverTypeSelect = document.getElementById('serverAddress');
 
         if (serverTypeSelect.value) {
             ipInput.disabled = true;
@@ -647,7 +647,78 @@
     // 3. 시나리오 데이터 전송 중단
 
     // 4. 시나리오 데이터 전송 종료
+    function loginStatusAPI(edgeTestClicked, edgeType) {
+        // 기본 URL 설정
+        let baseUrl = document.getElementById('localAddress').value; // 로컬 주소 입력 값 가져오기
 
+        // 로컬 주소가 없을 경우 서버 주소 사용
+        if (!baseUrl) {
+            const selectedServer = document.getElementById('serverAddress'); // 서버 주소 선택 값 가져오기
+
+            if (selectedServer === "devServer") {
+                // 개발 서버일 경우
+                if (edgeTestClicked) {
+                    baseUrl = "https://aetem-edge.dev-aistudio.com"; // Edge 개발 서버 URL
+                } else {
+                    baseUrl = "https://aetem-main.dev-aistudio.com"; // Main 개발 서버 URL
+                }
+            } else if (selectedServer === "prodServer") {
+                // 운용 서버일 경우
+                if (edgeTestClicked) {
+                    baseUrl = ""; // Edge 운용 서버 URL
+                } else {
+                    baseUrl = ""; // Main 운용 서버 URL
+                }
+            }
+        }
+
+        let deviceId = '';
+        let userId   = '';
+        let location = '';
+
+        if (edgeType == 'Edge01') {
+            deviceId = 'e1721716192363diafee';
+            userId   = 'test1';
+            location = '37°22\'32"N 127°49\'53"E';
+        }  else if (edgeType == 'Edge02') {
+            deviceId = 'e172171665gfs3diafee';
+            userId   = 'seogwontak';
+            location = '37°21\'56"N 127°49\'08"E';
+        } else {
+            deviceId = 'e17223rfsvzcsdceafee';
+            userId   = 'test2';
+            location = '37°21\'13"N 127°49\'49"E';
+        }
+
+
+        let formData = new URLSearchParams();
+        formData.append('userId', userId);
+        formData.append('deviceId', deviceId);
+        formData.append('location', location);
+        formData.append('deviceStatus', '00');
+
+        fetch(baseUrl + '/apis/logiout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            },
+            body: formData.toString()
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Login status sent:', data);
+                // 로그인 완료 후에 시나리오 시작 함수 호출
+                // startScenario(edge);
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+    }
 
 </script>
 
