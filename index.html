@@ -613,20 +613,18 @@
         }
 
 
-        let param = {
-            userId: userId,
-            deviceId: deviceId,
-            location: location,
-            deviceStatus: '01'
-        };
+        let formData = new URLSearchParams();
+        formData.append('userId', userId);
+        formData.append('deviceId', deviceId);
+        formData.append('location', location);
+        formData.append('deviceStatus', '01');
 
-
-        fetch(baseUrl + `/apis/loginCheck`, {
+        fetch(baseUrl + '/apis/loginCheck', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
             },
-            body: JSON.stringify(param)
+            body: formData.toString()
         })
             .then(response => {
                 if (!response.ok) {
