@@ -517,7 +517,7 @@
 
         // Edge 또는 Main 선택 여부에 따라 loginStatusAPI 호출
         const isEdgeTest = false; // EdgeTest 인지 여부를 true로 설정
-        loginStatusAPI(isEdgeTest, selectElement.value);
+        logoutAPI(isEdgeTest, selectElement.value);
     }
 
     function endEdgeScenario(button) {
@@ -549,7 +549,7 @@
 
         // Edge 또는 Main 선택 여부에 따라 loginStatusAPI 호출
         const isEdgeTest = true; // EdgeTest 인지 여부를 true로 설정
-        loginStatusAPI(isEdgeTest, selectElement.value);
+        logoutAPI(isEdgeTest, selectElement.value);
     }
 
 </script>
@@ -654,7 +654,7 @@
     // 3. 시나리오 데이터 전송 중단
 
     // 4. 시나리오 데이터 전송 종료
-    function loginStatusAPI(edgeTestClicked, edgeType) {
+    function logoutAPI(edgeTestClicked, edgeType) {
         // 기본 URL 설정
         let baseUrl = document.getElementById('localAddress').value; // 로컬 주소 입력 값 가져오기
 
