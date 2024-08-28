@@ -514,6 +514,10 @@
 
         // 이전에 추가된 이벤트 리스너 제거
         startButton = removeEventListeners(startButton);
+
+        // Edge 또는 Main 선택 여부에 따라 loginStatusAPI 호출
+        const isEdgeTest = false; // EdgeTest 인지 여부를 true로 설정
+        loginStatusAPI(isEdgeTest, selectElement.value);
     }
 
     function endEdgeScenario(button) {
@@ -543,6 +547,9 @@
         // 이전에 추가된 이벤트 리스너 제거
         startButton = removeEventListeners(startButton);
 
+        // Edge 또는 Main 선택 여부에 따라 loginStatusAPI 호출
+        const isEdgeTest = true; // EdgeTest 인지 여부를 true로 설정
+        loginStatusAPI(isEdgeTest, selectElement.value);
     }
 
 </script>
@@ -674,30 +681,26 @@
 
         let deviceId = '';
         let userId   = '';
-        let location = '';
 
         if (edgeType == 'Edge01') {
             deviceId = 'e1721716192363diafee';
             userId   = 'test1';
-            location = '37°22\'32"N 127°49\'53"E';
         }  else if (edgeType == 'Edge02') {
             deviceId = 'e172171665gfs3diafee';
             userId   = 'seogwontak';
-            location = '37°21\'56"N 127°49\'08"E';
         } else {
             deviceId = 'e17223rfsvzcsdceafee';
             userId   = 'test2';
-            location = '37°21\'13"N 127°49\'49"E';
         }
 
 
         let formData = new URLSearchParams();
         formData.append('userId', userId);
         formData.append('deviceId', deviceId);
-        formData.append('location', location);
+        formData.append('location', null);
         formData.append('deviceStatus', '00');
 
-        fetch(baseUrl + '/apis/logiout', {
+        fetch(baseUrl + '/apis/logoutEdge', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
