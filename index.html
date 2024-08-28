@@ -571,7 +571,7 @@
     // 1. 선택한 Edge 로그인 전송
     function loginStatusAPI(edgeTestClicked, edgeType) {
         // 기본 URL 설정
-        let baseUrl = document.getElementById('localAddress'); // 로컬 주소 입력 값 가져오기
+        let baseUrl = document.getElementById('localAddress').value; // 로컬 주소 입력 값 가져오기
 
         // 로컬 주소가 없을 경우 서버 주소 사용
         if (!baseUrl) {
