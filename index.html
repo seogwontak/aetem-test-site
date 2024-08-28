@@ -582,7 +582,7 @@
 
         // 로컬 주소가 없을 경우 서버 주소 사용
         if (!baseUrl) {
-            const selectedServer = document.getElementById('serverAddress'); // 서버 주소 선택 값 가져오기
+            const selectedServer = document.getElementById('serverAddress').value; // 서버 주소 선택 값 가져오기
 
             if (selectedServer === "devServer") {
                 // 개발 서버일 경우
@@ -660,7 +660,7 @@
 
         // 로컬 주소가 없을 경우 서버 주소 사용
         if (!baseUrl) {
-            const selectedServer = document.getElementById('serverAddress'); // 서버 주소 선택 값 가져오기
+            const selectedServer = document.getElementById('serverAddress').value; // 서버 주소 선택 값 가져오기
 
             if (selectedServer === "devServer") {
                 // 개발 서버일 경우
