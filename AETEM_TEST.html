@@ -1,0 +1,657 @@
+<!Doctype html>
+<html lang="ko">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+    <!-- 검색엔진 추적 차단 -->
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <title>AETEM TSET</title>
+
+    <style>
+        body {
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        .table th {
+            background-color: #d3d3d3;
+            text-align: center;
+        }
+        .table td {
+            vertical-align: middle;
+        }
+        .form-group label {
+            margin-right: 10px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+        }
+        .btn {
+            margin: 0 5px;
+        }
+        .log-row {
+            display: none;
+        }
+        .log-cell {
+            background-color: #f9f9f9;
+            padding: 20px;
+            height: 200px; /* 고정된 높이 설정 */
+            overflow-y: auto; /* 내용이 넘칠 경우 세로 스크롤 생성 */
+            box-sizing: border-box; /* 패딩과 보더를 포함한 크기 계산 */
+            white-space: pre-wrap;
+        }
+        .log-cell div {
+            margin-bottom: 5px; /* 로그 메시지 사이에 간격 추가 */
+            font-family: monospace;
+        }
+        .section-title {
+            margin-top: 20px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .toggle-arrow {
+            cursor: pointer;
+            font-size: 18px;
+            float: right; /* 화살표 오른쪽 정렬 */
+        }
+        .status-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .status-buttons .btn-group {
+            display: flex;
+        }
+        .btn-primary-custom {
+            background-color: #007bff; /* 파란색 배경 */
+            border-color: #007bff; /* 파란색 경계 */
+            color: white; /* 텍스트 색상 */
+        }
+        .btn-brown-stop {
+            background-color: #A0522D; /* 갈색 배경색 */
+            border-color: #A0522D; /* 갈색 경계색 */
+            color: white; /* 텍스트 색상 */
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- 서버 및 IP 설정 테이블 -->
+    <h4 class="section-title">서버 및 IP 설정</h4>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>옵션</th>
+            <th>설정</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>로컬 주소</td>
+            <td>
+                <input type="text" id="localAddress" class="form-control" placeholder="IP 주소를 입력하세요" oninput="handleIpInput()">
+            </td>
+        </tr>
+        <tr>
+            <td>서버 주소</td>
+            <td>
+                <select id="serverAddress" class="form-control" onchange="handleServerTypeSelect()">
+                    <option value="">서버 주소 선택</option>
+                    <option value="devServer">개발 서버</option>
+                    <option value="prodServer">운영 서버</option>
+                </select>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Edge TEST 테이블 -->
+    <h4 class="section-title">Edge TEST</h4>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>No.</th>
+            <th>시나리오</th>
+            <th>Edge</th>
+            <th>상태</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>1</td>
+            <td>시나리오1</td>
+            <td>
+                <select class="form-control dropdown" id="edgeSelect1">
+                    <option value="">선택</option>
+                    <option value="Edge01">Edge01</option>
+                    <option value="Edge02">Edge02</option>
+                    <option value="Edge03">Edge03</option>
+                </select>
+            </td>
+            <td>
+                <div class="status-buttons">
+                    <div class="btn-group">
+                        <button class="btn btn-secondary btn-start" onclick="startEdgeScenario(this)">시작</button>
+                        <button class="btn btn-secondary" onclick="endEdgeScenario(this)" disabled="disabled">종료</button>
+                    </div>
+                    <span class="toggle-arrow" onclick="toggleLog(this)">▼</span>
+                </div>
+            </td>
+        </tr>
+        <tr class="log-row">
+            <td colspan="4">
+                <div class="log-cell" id="logEdge1">
+                    <!-- 로그 메시지가 여기에 추가됩니다 -->
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>시나리오2</td>
+            <td>
+                <select class="form-control dropdown" id="edgeSelect2">
+                    <option value="">선택</option>
+                    <option value="Edge01">Edge01</option>
+                    <option value="Edge02">Edge02</option>
+                    <option value="Edge03">Edge03</option>
+                </select>
+            </td>
+            <td>
+                <div class="status-buttons">
+                    <div class="btn-group">
+                        <button class="btn btn-secondary btn-start" onclick="startEdgeScenario(this)">시작</button>
+                        <button class="btn btn-secondary" onclick="endEdgeScenario(this)" disabled="disabled">종료</button>
+                    </div>
+                    <span class="toggle-arrow" onclick="toggleLog(this)">▼</span>
+                </div>
+            </td>
+        </tr>
+        <tr class="log-row">
+            <td colspan="4">
+                <div class="log-cell" id="logEdge2">
+                    <!-- 로그 메시지가 여기에 추가됩니다 -->
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>시나리오3</td>
+            <td>
+                <select class="form-control dropdown" id="edgeSelect3">
+                    <option value="">선택</option>
+                    <option value="Edge01">Edge01</option>
+                    <option value="Edge02">Edge02</option>
+                    <option value="Edge03">Edge03</option>
+                </select>
+            </td>
+            <td>
+                <div class="status-buttons">
+                    <div class="btn-group">
+                        <button class="btn btn-secondary btn-start" onclick="startEdgeScenario(this)">시작</button>
+                        <button class="btn btn-secondary" onclick="endEdgeScenario(this)" disabled="disabled">종료</button>
+                    </div>
+                    <span class="toggle-arrow" onclick="toggleLog(this)">▼</span>
+                </div>
+            </td>
+        </tr>
+        <tr class="log-row">
+            <td colspan="4">
+                <div class="log-cell" id="logEdge3">
+                    <!-- 로그 메시지가 여기에 추가됩니다 -->
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Main TEST 테이블 -->
+    <h4 class="section-title">Main TEST</h4>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>No.</th>
+            <th>시나리오</th>
+            <th>Edge</th>
+            <th>상태</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>1</td>
+            <td>시나리오1</td>
+            <td>
+                <select class="form-control dropdown" id="mainEdgeSelect1">
+                    <option value="">선택</option>
+                    <option value="Edge01">Edge01</option>
+                    <option value="Edge02">Edge02</option>
+                    <option value="Edge03">Edge03</option>
+                </select>
+            </td>
+            <td>
+                <div class="status-buttons">
+                    <div class="btn-group">
+                        <button class="btn btn-secondary btn-start" onclick="startMainScenario(this)">시작</button>
+                        <button class="btn btn-secondary" onclick="endMainScenario(this)" disabled="disabled">종료</button>
+                    </div>
+                    <span class="toggle-arrow" onclick="toggleLog(this)">▼</span>
+                </div>
+            </td>
+        </tr>
+        <tr class="log-row">
+            <td colspan="4">
+                <div class="log-cell" id="logMain1">
+                    <!-- 로그 메시지가 여기에 추가됩니다 -->
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>시나리오2</td>
+            <td>
+                <select class="form-control dropdown" id="mainEdgeSelect2">
+                    <option value="">선택</option>
+                    <option value="Edge01">Edge01</option>
+                    <option value="Edge02">Edge02</option>
+                    <option value="Edge03">Edge03</option>
+                </select>
+            </td>
+            <td>
+                <div class="status-buttons">
+                    <div class="btn-group">
+                        <button class="btn btn-secondary btn-start" onclick="startMainScenario(this)">시작</button>
+                        <button class="btn btn-secondary" onclick="endMainScenario(this)" disabled="disabled">종료</button>
+                    </div>
+                    <span class="toggle-arrow" onclick="toggleLog(this)">▼</span>
+                </div>
+            </td>
+        </tr>
+        <tr class="log-row">
+            <td colspan="4">
+                <div class="log-cell" id="logMain2">
+                    <!-- 로그 메시지가 여기에 추가됩니다 -->
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>시나리오3</td>
+            <td>
+                <select class="form-control dropdown" id="mainEdgeSelect3">
+                    <option value="">선택</option>
+                    <option value="Edge01">Edge01</option>
+                    <option value="Edge02">Edge02</option>
+                    <option value="Edge03">Edge03</option>
+                </select>
+            </td>
+            <td>
+                <div class="status-buttons">
+                    <div class="btn-group">
+                        <button class="btn btn-secondary btn-start" onclick="startMainScenario(this)">시작</button>
+                        <button class="btn btn-secondary" onclick="endMainScenario(this)" disabled="disabled">종료</button>
+                    </div>
+                    <span class="toggle-arrow" onclick="toggleLog(this)">▼</span>
+                </div>
+            </td>
+        </tr>
+        <tr class="log-row">
+            <td colspan="4">
+                <div class="log-cell" id="logMain3">
+                    <!-- 로그 메시지가 여기에 추가됩니다 -->
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+<script>
+    function handleIpInput() {
+        const ipInput = document.getElementById('localAddress');
+        const serverTypeSelect = document.getElementById('serverAddress');
+
+        if (ipInput.value) {
+            serverTypeSelect.disabled = true;
+        } else {
+            serverTypeSelect.disabled = false;
+        }
+    }
+
+    function handleServerTypeSelect() {
+        const ipInput = document.getElementById('localAddress');
+        const serverTypeSelect = document.getElementById('serverType');
+
+        if (serverTypeSelect.value) {
+            ipInput.disabled = true;
+        } else {
+            ipInput.disabled = false;
+        }
+    }
+
+    function toggleLog(arrow) {
+        const row = arrow.closest('tr');
+        const logRow = row.nextElementSibling;
+
+        if (logRow.style.display === 'none' || logRow.style.display === '') {
+            logRow.style.display = 'table-row';
+            arrow.textContent = '▲';
+        } else {
+            logRow.style.display = 'none';
+            arrow.textContent = '▼';
+        }
+    }
+
+    function startEdgeScenario(button) {
+        const row           = button.closest('tr');
+        const selectElement = row.querySelector('select');
+        const endButton     = row.querySelector('.btn-secondary:last-child'); // 종료 버튼 선택
+        const logElement    = row.nextElementSibling.querySelector('.log-cell'); // 로그 셀 선택
+        const logId         = `logEdge${Math.floor(Array.from(row.parentNode.children).indexOf(row) / 2) + 1}`;
+
+        if (!selectElement.value) {
+            alert('Edge를 선택하세요.');
+            return;
+        }
+
+        // 로그 삭제
+        if (logElement) {
+            logElement.textContent = ''; // 로그 내용을 지웁니다.
+        }
+
+        logMessage(logId, `시나리오 시작: ${selectElement.value}`);
+        button.classList.remove('btn-secondary');
+        button.classList.add('btn-brown-stop'); // 중단 버튼을 적색으로 변경
+        button.textContent = "중단";
+
+        // 종료 버튼 활성화 및 색상 변경
+        endButton.disabled = false;
+        endButton.classList.remove('btn-secondary');
+        endButton.classList.add('btn-success'); // 종료 버튼을 녹색으로 변경
+
+        // select 박스 비활성화
+        selectElement.disabled = true;
+
+        // 기존 이벤트 리스너 제거 및 새로운 리스너 추가
+        button.replaceWith(button.cloneNode(true));
+        button = row.querySelector('.btn-brown-stop');
+
+        // Edge 또는 Main 선택 여부에 따라 loginStatusAPI 호출
+        const isEdgeTest = true; // EdgeTest 인지 여부를 true로 설정
+        loginStatusAPI(isEdgeTest , selectElement.value);
+
+        // 중단 버튼 클릭 이벤트 추가
+        button.addEventListener("click", function() {
+            let result = confirm('시나리오를 중단하시겠습니까?');
+
+            if (result) {
+                // 버튼을 다시 시작 버튼으로 변경
+                button.classList.remove('btn-brown-stop');
+                button.classList.add('btn-primary'); // 시작 버튼을 파란색으로 변경
+                button.textContent = "시작";
+
+                // 로그 메시지 업데이트
+                logMessage(logId, `시나리오 중단: ${selectElement.value}`);
+
+                // 종료 버튼을 다시 비활성화하고 색상 변경
+                endButton.classList.remove('btn-success');
+                endButton.classList.add('btn-secondary');
+                endButton.disabled = true; // 종료 버튼 비활성화
+
+                // select 박스를 다시 활성화
+                selectElement.disabled = false;
+                button.replaceWith(button.cloneNode(true));
+
+            }
+        });
+    }
+
+    function startMainScenario(button) {
+        const row           = button.closest('tr');
+        const selectElement = row.querySelector('select');
+        const endButton     = row.querySelector('.btn-secondary:last-child'); // 종료 버튼 선택
+        const logElement    = row.nextElementSibling.querySelector('.log-cell'); // 로그 셀 선택
+        const logId         = `logMain${Math.floor(Array.from(row.parentNode.children).indexOf(row) / 2) + 1}`;
+
+        if (!selectElement.value) {
+            alert('Edge를 선택하세요.');
+            return;
+        }
+
+        // 로그 삭제
+        if (logElement) {
+            logElement.textContent = ''; // 로그 내용을 지웁니다.
+        }
+
+        logMessage(logId, `시나리오 시작: ${selectElement.value}`);
+        button.classList.remove('btn-secondary');
+        button.classList.add('btn-brown-stop'); // 중단 버튼을 적색으로 변경
+        button.textContent = "중단";
+
+        // select 박스 비활성화
+        selectElement.disabled = true;
+
+        // 종료 버튼 색상 변경
+        endButton.disabled = false;
+        endButton.classList.remove('btn-secondary');
+        endButton.classList.add('btn-success'); // 원하는 색상 클래스로 변경
+
+        // 기존 이벤트 리스너 제거
+        button.replaceWith(button.cloneNode(true));
+        button = row.querySelector('.btn-brown-stop');
+
+        // Edge 또는 Main 선택 여부에 따라 loginStatusAPI 호출
+        const isEdgeTest = false; // EdgeTest 인지 여부를 true로 설정
+        loginStatusAPI(isEdgeTest, selectElement.value);
+
+        // 새로운 이벤트 리스너 추가
+        button.addEventListener("click", function() {
+            let result = confirm('시나리오를 종료하시겠습니까?');
+
+            if (result) {
+                // 버튼을 다시 시작 버튼으로 변경
+                button.classList.remove('btn-brown-stop');
+                button.classList.add('btn-primary'); // 시작 버튼을 파란색으로 변경
+                button.textContent = "시작";
+
+                // 로그 메시지 업데이트
+                logMessage(logId, `시나리오 중단: ${selectElement.value}`);
+
+                // 종료 버튼 색상 원래대로 (회색)
+                endButton.classList.remove('btn-success');
+                endButton.classList.add('btn-secondary');
+
+                // select 박스를 다시 활성화
+                selectElement.disabled = false;
+                button.replaceWith(button.cloneNode(true));
+            } else {
+                alert('진행~');
+            }
+        });
+    }
+
+    function logMessage(logId, message) {
+        const logElement = document.getElementById(logId);
+        if (logElement) {
+            const messageDiv = document.createElement('div'); // 새로운 div 생성
+            messageDiv.textContent = message; // 메시지 추가
+            logElement.appendChild(messageDiv); // 로그 요소에 추가
+
+            // 스크롤을 맨 아래로 이동
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+    }
+
+    function removeEventListeners(button) {
+        const newButton = button.cloneNode(true);
+        button.replaceWith(newButton);
+        return newButton;
+    }
+
+    function endMainScenario(button) {
+        const row           = button.closest('tr');
+        const selectElement = row.querySelector('select');
+        const logId         = `logMain${Math.floor(Array.from(row.parentNode.children).indexOf(row) / 2) + 1}`;
+        let startButton     = row.querySelector('.btn-brown-stop'); // 중단 상태의 시작 버튼 선택
+
+        // 로그 메시지 업데이트
+        logMessage(logId, `시나리오 종료: ${selectElement.value}`);
+
+        // 시작 버튼 상태 초기화 (파란색으로 변경)
+        startButton.classList.remove('btn-brown-stop');
+        startButton.classList.add('btn-primary');
+        startButton.textContent = "시작";
+
+        // 종료 버튼 비활성화 및 색상 초기화
+        button.classList.remove('btn-success');
+        button.classList.add('btn-secondary');
+        button.disabled = true;
+
+        // select 박스 다시 활성화
+        selectElement.disabled = false;
+
+        // 이전에 추가된 이벤트 리스너 제거
+        startButton = removeEventListeners(startButton);
+    }
+
+    function endEdgeScenario(button) {
+        const row           = button.closest('tr');
+        const selectElement = row.querySelector('select');
+        const logId         = `logEdge${Math.floor(Array.from(row.parentNode.children).indexOf(row) / 2) + 1}`;
+        let   startButton   = row.querySelector('.btn-brown-stop'); // 중단 상태의 시작 버튼 선택
+
+        // 로그 메시지 업데이트
+        logMessage(logId, `시나리오 종료: ${selectElement.value}`);
+
+        // 시작 버튼 상태 초기화 (파란색으로 변경)
+        startButton.classList.remove('btn-brown-stop');
+        startButton.classList.add('btn-primary');
+        startButton.textContent = "시작";
+
+        // 종료 버튼 비활성화 및 색상 초기화
+        button.classList.remove('btn-success');
+        button.classList.add('btn-secondary');
+        button.disabled = true;
+
+        button.replaceWith(button.cloneNode(true));
+
+        // select 박스 다시 활성화
+        selectElement.disabled = false;
+
+        // 이전에 추가된 이벤트 리스너 제거
+        startButton = removeEventListeners(startButton);
+
+    }
+
+</script>
+
+<script>
+    document.querySelectorAll('select').forEach(function(selectElement) {
+        selectElement.addEventListener('change', function() {
+            const row = selectElement.closest('tr');
+            const startButton = row.querySelector('.btn-start'); // 시작 버튼만 선택
+
+            if (startButton) { // 시작 버튼이 존재하는지 확인
+                if (selectElement.value !== '') {
+                    startButton.classList.remove('btn-secondary');
+                    startButton.classList.add('btn-primary'); // 파란색으로 변경
+                } else {
+                    startButton.classList.remove('btn-primary');
+                    startButton.classList.add('btn-secondary'); // 회색으로 변경
+                }
+            }
+        });
+    });
+
+</script>
+
+<script>
+    // 1. 선택한 Edge 로그인 전송
+    function loginStatusAPI(edgeTestClicked, edgeType) {
+        // 기본 URL 설정
+        let baseUrl = document.getElementById('localAddress'); // 로컬 주소 입력 값 가져오기
+
+        // 로컬 주소가 없을 경우 서버 주소 사용
+        if (!baseUrl) {
+            const selectedServer = document.getElementById('serverAddress'); // 서버 주소 선택 값 가져오기
+
+            if (selectedServer === "devServer") {
+                // 개발 서버일 경우
+                if (edgeTestClicked) {
+                    baseUrl = "https://aetem-edge.dev-aistudio.com"; // Edge 개발 서버 URL
+                } else {
+                    baseUrl = "https://aetem-main.dev-aistudio.com"; // Main 개발 서버 URL
+                }
+            } else if (selectedServer === "prodServer") {
+                // 운용 서버일 경우
+                if (edgeTestClicked) {
+                    baseUrl = ""; // Edge 운용 서버 URL
+                } else {
+                    baseUrl = ""; // Main 운용 서버 URL
+                }
+            }
+        }
+
+        let deviceId = '';
+        let userId   = '';
+        let location = '';
+
+        if (edgeType == 'Edge01') {
+            deviceId = 'e1721716192363diafee';
+            userId   = 'test1';
+            location = '37°22\'32"N 127°49\'53"E';
+        }  else if (edgeType == 'Edge02') {
+            deviceId = 'e172171665gfs3diafee';
+            userId   = 'seogwontak';
+            location = '37°21\'56"N 127°49\'08"E';
+        } else {
+            deviceId = 'e17223rfsvzcsdceafee';
+            userId   = 'test2';
+            location = '37°21\'13"N 127°49\'49"E';
+        }
+
+
+        let param = {
+            userId: userId,
+            deviceId: deviceId,
+            location: location,
+            deviceStatus: '01'
+        };
+
+
+        fetch(baseUrl + `/apis/loginCheck`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(param)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Login status sent:', data);
+                // 로그인 완료 후에 시나리오 시작 함수 호출
+                // startScenario(edge);
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+    }
+
+    // 2. 시나리오 데이터 전송 시간 : 6초 간격
+
+    // 3. 시나리오 데이터 전송 중단
+
+    // 4. 시나리오 데이터 전송 종료
+
+
+</script>
+
+</body>
+</html>
