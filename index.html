@@ -659,7 +659,7 @@
                 }
             })
             .catch(error => {
-                console.error('There was a problem with the fetch operation:', JSON.stringify(error));
+                console.error('There was a problem with the fetch operation:', error);
             });
     }
 
@@ -710,10 +710,10 @@
                     logMessage(logId, '------------------------------------------');
                 }
             } catch (error) {
-                console.error('There was a problem with the fetch operation:', JSON.stringify(error));
+                console.error('There was a problem with the fetch operation:', error);
                 logMessage(logId, '------------------------------------------');
                 logMessage(logId,`Current Time : ${formattedTime}`);
-                logMessage(logId, 'There was a problem with the fetch operation:', JSON.stringify(error));
+                logMessage(logId, 'There was a problem with the fetch operation:', error);
                 logMessage(logId, '------------------------------------------');
             }
         }
@@ -806,7 +806,7 @@
             .catch(error => {
                 logMessage(logId,'------------------------------------------');
                 logMessage(logId,`Current Time : ${formattedTime}`);
-                logMessage(logId,'There was a problem with the fetch operation:', JSON.stringify(error));
+                logMessage(logId,'There was a problem with the fetch operation:', error);
                 logMessage(logId,'------------------------------------------');
             });
     }
