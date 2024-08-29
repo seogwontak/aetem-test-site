@@ -640,9 +640,13 @@
                 return response.json();
             })
             .then(data => {
-                console.log('Login status sent:', data);
+
                 // 로그인 완료 후에 시나리오 시작 함수 호출
-                // startScenario(edge);
+                if (data.result) {
+                    startScenario(edgeType);
+                } else {
+                    console.log("execution failed");
+                }
             })
             .catch(error => {
                 console.error('There was a problem with the fetch operation:', error);
@@ -650,6 +654,52 @@
     }
 
     // 2. 시나리오 데이터 전송 시간 : 6초 간격
+    async function startScenario(edgeType) {
+        // 기본 URL 설정
+        let baseUrl = document.getElementById('localAddress').value || 'https://default-server-url.com';
+
+        // JSON 데이터를 가져오기\
+        let droneDataScript;
+        if (edgeType == 'Edge01') {
+            droneDataScript = document.getElementById('droneData1').textContent;
+        } else if (edgeType == 'Edge02') {
+            droneDataScript = document.getElementById('droneData2').textContent;
+        } else {
+            droneDataScript = document.getElementById('droneData3').textContent;
+        }
+        const jsonData = JSON.parse(droneDataScript);
+
+        // 시나리오 데이터 전송 함수
+        async function sendScenarioData(droneData) {
+            try {
+                const response = await fetch(baseUrl + '/apis/currentDroneLocation', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(droneData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                console.log('Scenario data sent:', data);
+            } catch (error) {
+                console.error('There was a problem with the fetch operation:', error);
+            }
+        }
+
+        // 6초 간격으로 순차적으로 데이터 전송
+        for (let i = 0; i < jsonData.length; i++) {
+            await sendScenarioData(jsonData[i]);
+            console.log(`Sent data for deviceId: ${jsonData[i].deviceId}`);
+            await new Promise(resolve => setTimeout(resolve, 6000));  // 6초 대기
+        }
+
+        console.log('All data sent.');
+    }
 
     // 3. 시나리오 데이터 전송 중단
 
@@ -716,13 +766,618 @@
             .then(data => {
                 console.log('Login status sent:', data);
                 // 로그인 완료 후에 시나리오 시작 함수 호출
-                // startScenario(edge);
             })
             .catch(error => {
                 console.error('There was a problem with the fetch operation:', error);
             });
     }
 
+</script>
+
+<script id="droneData1" type="application/json">
+    [{
+        "timestamp": "2024-08-09T12:34:56Z",
+        "deviceId": "e1721715756999oujjjq",
+        "deviceType": "drone",
+        "currentHistoryYn": "Y",
+        "deviceStatus": "01",
+        "location": "37°22'52\"N 127°49'59\"E",
+        "rawFile": {
+            "raw_file_id": "img123",
+            "raw_file_seq": 1,
+            "raw_file_path": "/path/to/image",
+            "raw_file_name": "image_name.jpg",
+            "raw_file_size": 12345,
+            "raw_file_ext": ".jpg",
+            "ext_type": "JPEG",
+            "original_file_path": "/path/to/original_image",
+            "original_file_name": "original_image_name.jpg",
+            "register_id": "user123",
+            "register_datetime": "2024-08-09T12:34:56Z"
+        },
+        "GPS": {
+            "latitude_or_X": 37.7749,
+            "longitude_or_Y": 122.4194,
+            "altitude_or_Z": 150,
+            "gps_time": "2024-08-09T12:34:56Z"
+        },
+        "LRF": {
+            "distance": 200.5,
+            "latitude_or_X": 37.7749,
+            "longitude_or_Y": 122.4194,
+            "altitude_or_Z": 150
+        },
+        "bounding_boxes": []
+    },{
+        "timestamp": "2024-08-09T12:34:56Z",
+        "deviceId": "e1721715756999oujjjq",
+        "device_type": "drone",
+        "currentHistoryYn": "Y",
+        "deviceStatus": "01",
+        "location": "37°22'56\"N 127°49'58\"E",
+        "rawFile": {
+            "raw_file_id": "img123",
+            "raw_file_seq": 1,
+            "raw_file_path": "/path/to/image",
+            "raw_file_name": "image_name.jpg",
+            "raw_file_size": 12345,
+            "raw_file_ext": ".jpg",
+            "ext_type": "JPEG",
+            "original_file_path": "/path/to/original_image",
+            "original_file_name": "original_image_name.jpg",
+            "register_id": "user123",
+            "register_datetime": "2024-08-09T12:34:56Z"
+        },
+        "GPS": {
+            "latitude_or_X": 37.7749,
+            "longitude_or_Y": 122.4194,
+            "altitude_or_Z": 150,
+            "gps_time": "2024-08-09T12:34:56Z"
+        },
+        "LRF": {
+            "distance": 200.5,
+            "latitude_or_X": 37.7749,
+            "longitude_or_Y": 122.4194,
+            "altitude_or_Z": 150
+        },
+        "bounding_boxes": []
+    },{
+        "timestamp": "2024-08-09T12:34:56Z",
+        "deviceId": "e1721715756999oujjjq",
+        "device_type": "drone",
+        "currentHistoryYn": "Y",
+        "deviceStatus": "01",
+        "location": "37°22'57\"N 127°49'58\"E",
+        "rawFile": {
+            "raw_file_id": "img123",
+            "raw_file_seq": 1,
+            "raw_file_path": "/path/to/image",
+            "raw_file_name": "image_name.jpg",
+            "raw_file_size": 12345,
+            "raw_file_ext": ".jpg",
+            "ext_type": "JPEG",
+            "original_file_path": "/path/to/original_image",
+            "original_file_name": "original_image_name.jpg",
+            "register_id": "user123",
+            "register_datetime": "2024-08-09T12:34:56Z"
+        },
+        "GPS": {
+            "latitude_or_X": 37.7749,
+            "longitude_or_Y": 122.4194,
+            "altitude_or_Z": 150,
+            "gps_time": "2024-08-09T12:34:56Z"
+        },
+        "LRF": {
+            "distance": 200.5,
+            "latitude_or_X": 37.7749,
+            "longitude_or_Y": 122.4194,
+            "altitude_or_Z": 150
+        },
+        "bounding_boxes": []
+    },{
+        "timestamp": "2024-08-09T12:34:56Z",
+        "deviceId": "e1721715756999oujjjq",
+        "device_type": "drone",
+        "currentHistoryYn": "Y",
+        "deviceStatus": "01",
+        "location": "37°22'57\"N 127°49'58\"E",
+        "rawFile": {
+            "raw_file_id": "img123",
+            "raw_file_seq": 1,
+            "raw_file_path": "/path/to/image",
+            "raw_file_name": "image_name.jpg",
+            "raw_file_size": 12345,
+            "raw_file_ext": ".jpg",
+            "ext_type": "JPEG",
+            "original_file_path": "/path/to/original_image",
+            "original_file_name": "original_image_name.jpg",
+            "register_id": "user123",
+            "register_datetime": "2024-08-09T12:34:56Z"
+        },
+        "GPS": {
+            "latitude_or_X": 37.7749,
+            "longitude_or_Y": 122.4194,
+            "altitude_or_Z": 150,
+            "gps_time": "2024-08-09T12:34:56Z"
+        },
+        "LRF": {
+            "distance": 200.5,
+            "latitude_or_X": 37.7749,
+            "longitude_or_Y": 122.4194,
+            "altitude_or_Z": 150
+        },
+        "bounding_boxes": []
+    },{
+        "timestamp": "2024-08-09T12:34:56Z",
+        "deviceId": "e1721715756999oujjjq",
+        "device_type": "drone",
+        "currentHistoryYn": "Y",
+        "deviceStatus": "01",
+        "location": "37°22'57\"N 127°49'58\"E",
+        "rawFile": {
+            "raw_file_id": "img123",
+            "raw_file_seq": 1,
+            "raw_file_path": "/path/to/image",
+            "raw_file_name": "image_name.jpg",
+            "raw_file_size": 12345,
+            "raw_file_ext": ".jpg",
+            "ext_type": "JPEG",
+            "original_file_path": "/path/to/original_image",
+            "original_file_name": "original_image_name.jpg",
+            "register_id": "user123",
+            "register_datetime": "2024-08-09T12:34:56Z"
+        },
+        "GPS": {
+            "latitude_or_X": 37.7749,
+            "longitude_or_Y": 122.4194,
+            "altitude_or_Z": 150,
+            "gps_time": "2024-08-09T12:34:56Z"
+        },
+        "LRF": {
+            "distance": 200.5,
+            "latitude_or_X": 37.7749,
+            "longitude_or_Y": 122.4194,
+            "altitude_or_Z": 150
+        },
+        "bounding_boxes": []
+    },{
+        "timestamp": "2024-08-09T12:34:56Z",
+        "deviceId": "e1721715756999oujjjq",
+        "device_type": "drone",
+        "currentHistoryYn": "Y",
+        "deviceStatus": "01",
+        "location": "37°23'00\"N 127°49'59\"E",
+        "rawFile": {
+            "raw_file_id": "img123",
+            "raw_file_seq": 1,
+            "raw_file_path": "/path/to/image",
+            "raw_file_name": "image_name.jpg",
+            "raw_file_size": 12345,
+            "raw_file_ext": ".jpg",
+            "ext_type": "JPEG",
+            "original_file_path": "/path/to/original_image",
+            "original_file_name": "original_image_name.jpg",
+            "register_id": "user123",
+            "register_datetime": "2024-08-09T12:34:56Z"
+        },
+        "GPS": {
+            "latitude_or_X": 37.7749,
+            "longitude_or_Y": 122.4194,
+            "altitude_or_Z": 150,
+            "gps_time": "2024-08-09T12:34:56Z"
+        },
+        "LRF": {
+            "distance": 200.5,
+            "latitude_or_X": 37.7749,
+            "longitude_or_Y": 122.4194,
+            "altitude_or_Z": 150
+        },
+        "bounding_boxes": []
+    }]
+</script>
+
+<script id="droneData2" type="application/json">
+    [{
+        "timestamp": "2024-08-09T12:34:56Z",
+        "deviceId": "e17fewnajkifnw123csv",
+        "deviceType": "03",
+        "currentHistoryYn": "Y",
+        "deviceStatus": "01",
+        "location": "37°21'55\"N 127°49'01\"E",
+        "rawFile": {
+            "raw_file_id": "img123",
+            "raw_file_seq": 1,
+            "raw_file_path": "/path/to/image",
+            "raw_file_name": "image_name.jpg",
+            "raw_file_size": 12345,
+            "raw_file_ext": ".jpg",
+            "ext_type": "JPEG",
+            "original_file_path": "/path/to/original_image",
+            "original_file_name": "original_image_name.jpg",
+            "register_id": "user123",
+            "register_datetime": "2024-08-09T12:34:56Z"
+        },
+        "GPS": {
+            "latitude_or_X": 37.7749,
+            "longitude_or_Y": 122.4194,
+            "altitude_or_Z": 150,
+            "gps_time": "2024-08-09T12:34:56Z"
+        },
+        "LRF": {
+            "distance": 200.5,
+            "latitude_or_X": 37.7749,
+            "longitude_or_Y": 122.4194,
+            "altitude_or_Z": 150
+        },
+        "bounding_boxes": []
+    },{
+        "timestamp": "2024-08-09T12:34:56Z",
+        "deviceId": "e17fewnajkifnw123csv",
+        "device_type": "drone",
+        "currentHistoryYn": "Y",
+        "deviceStatus": "01",
+        "location": "37°21'55\"N 127°49'00\"E",
+        "rawFile": {
+            "raw_file_id": "img123",
+            "raw_file_seq": 1,
+            "raw_file_path": "/path/to/image",
+            "raw_file_name": "image_name.jpg",
+            "raw_file_size": 12345,
+            "raw_file_ext": ".jpg",
+            "ext_type": "JPEG",
+            "original_file_path": "/path/to/original_image",
+            "original_file_name": "original_image_name.jpg",
+            "register_id": "user123",
+            "register_datetime": "2024-08-09T12:34:56Z"
+        },
+        "GPS": {
+            "latitude_or_X": 37.7749,
+            "longitude_or_Y": 122.4194,
+            "altitude_or_Z": 150,
+            "gps_time": "2024-08-09T12:34:56Z"
+        },
+        "LRF": {
+            "distance": 200.5,
+            "latitude_or_X": 37.7749,
+            "longitude_or_Y": 122.4194,
+            "altitude_or_Z": 150
+        },
+        "bounding_boxes": []
+    },{
+        "timestamp": "2024-08-09T12:34:56Z",
+        "deviceId": "e17fewnajkifnw123csv",
+        "device_type": "drone",
+        "currentHistoryYn": "Y",
+        "deviceStatus": "01",
+        "location": "37°21'55\"N 127°49'00\"E",
+        "rawFile": {
+            "raw_file_id": "img123",
+            "raw_file_seq": 1,
+            "raw_file_path": "/path/to/image",
+            "raw_file_name": "image_name.jpg",
+            "raw_file_size": 12345,
+            "raw_file_ext": ".jpg",
+            "ext_type": "JPEG",
+            "original_file_path": "/path/to/original_image",
+            "original_file_name": "original_image_name.jpg",
+            "register_id": "user123",
+            "register_datetime": "2024-08-09T12:34:56Z"
+        },
+        "GPS": {
+            "latitude_or_X": 37.7749,
+            "longitude_or_Y": 122.4194,
+            "altitude_or_Z": 150,
+            "gps_time": "2024-08-09T12:34:56Z"
+        },
+        "LRF": {
+            "distance": 200.5,
+            "latitude_or_X": 37.7749,
+            "longitude_or_Y": 122.4194,
+            "altitude_or_Z": 150
+        },
+        "bounding_boxes": []
+    },{
+        "timestamp": "2024-08-09T12:34:56Z",
+        "deviceId": "e17fewnajkifnw123csv",
+        "device_type": "drone",
+        "currentHistoryYn": "Y",
+        "deviceStatus": "01",
+        "location": "37°21'54\"N 127°49'00\"E",
+        "rawFile": {
+            "raw_file_id": "img123",
+            "raw_file_seq": 1,
+            "raw_file_path": "/path/to/image",
+            "raw_file_name": "image_name.jpg",
+            "raw_file_size": 12345,
+            "raw_file_ext": ".jpg",
+            "ext_type": "JPEG",
+            "original_file_path": "/path/to/original_image",
+            "original_file_name": "original_image_name.jpg",
+            "register_id": "user123",
+            "register_datetime": "2024-08-09T12:34:56Z"
+        },
+        "GPS": {
+            "latitude_or_X": 37.7749,
+            "longitude_or_Y": 122.4194,
+            "altitude_or_Z": 150,
+            "gps_time": "2024-08-09T12:34:56Z"
+        },
+        "LRF": {
+            "distance": 200.5,
+            "latitude_or_X": 37.7749,
+            "longitude_or_Y": 122.4194,
+            "altitude_or_Z": 150
+        },
+        "bounding_boxes": []
+    },{
+        "timestamp": "2024-08-09T12:34:56Z",
+        "deviceId": "e17fewnajkifnw123csv",
+        "device_type": "drone",
+        "currentHistoryYn": "Y",
+        "deviceStatus": "01",
+        "location": "37°21'54\"N 127°49'00\"E",
+        "rawFile": {
+            "raw_file_id": "img123",
+            "raw_file_seq": 1,
+            "raw_file_path": "/path/to/image",
+            "raw_file_name": "image_name.jpg",
+            "raw_file_size": 12345,
+            "raw_file_ext": ".jpg",
+            "ext_type": "JPEG",
+            "original_file_path": "/path/to/original_image",
+            "original_file_name": "original_image_name.jpg",
+            "register_id": "user123",
+            "register_datetime": "2024-08-09T12:34:56Z"
+        },
+        "GPS": {
+            "latitude_or_X": 37.7749,
+            "longitude_or_Y": 122.4194,
+            "altitude_or_Z": 150,
+            "gps_time": "2024-08-09T12:34:56Z"
+        },
+        "LRF": {
+            "distance": 200.5,
+            "latitude_or_X": 37.7749,
+            "longitude_or_Y": 122.4194,
+            "altitude_or_Z": 150
+        },
+        "bounding_boxes": []
+    },{
+        "timestamp": "2024-08-09T12:34:56Z",
+        "deviceId": "e17fewnajkifnw123csv",
+        "device_type": "drone",
+        "currentHistoryYn": "Y",
+        "deviceStatus": "01",
+        "location": "37°21'54\"N 127°48'58\"E",
+        "rawFile": {
+            "raw_file_id": "img123",
+            "raw_file_seq": 1,
+            "raw_file_path": "/path/to/image",
+            "raw_file_name": "image_name.jpg",
+            "raw_file_size": 12345,
+            "raw_file_ext": ".jpg",
+            "ext_type": "JPEG",
+            "original_file_path": "/path/to/original_image",
+            "original_file_name": "original_image_name.jpg",
+            "register_id": "user123",
+            "register_datetime": "2024-08-09T12:34:56Z"
+        },
+        "GPS": {
+            "latitude_or_X": 37.7749,
+            "longitude_or_Y": 122.4194,
+            "altitude_or_Z": 150,
+            "gps_time": "2024-08-09T12:34:56Z"
+        },
+        "LRF": {
+            "distance": 200.5,
+            "latitude_or_X": 37.7749,
+            "longitude_or_Y": 122.4194,
+            "altitude_or_Z": 150
+        },
+        "bounding_boxes": []
+    }]
+</script>
+
+<script id="droneData3" type="application/json">
+    [{
+        "timestamp": "2024-08-09T12:34:56Z",
+        "deviceId": "e17fewn12sdfe3sd3dsv",
+        "deviceType": "drone",
+        "currentHistoryYn": "Y",
+        "deviceStatus": "01",
+        "location": "37°21'08\"N 127°49'53\"E",
+        "rawFile": {
+            "raw_file_id": "img123",
+            "raw_file_seq": 1,
+            "raw_file_path": "/path/to/image",
+            "raw_file_name": "image_name.jpg",
+            "raw_file_size": 12345,
+            "raw_file_ext": ".jpg",
+            "ext_type": "JPEG",
+            "original_file_path": "/path/to/original_image",
+            "original_file_name": "original_image_name.jpg",
+            "register_id": "user123",
+            "register_datetime": "2024-08-09T12:34:56Z"
+        },
+        "GPS": {
+            "latitude_or_X": 37.7749,
+            "longitude_or_Y": 122.4194,
+            "altitude_or_Z": 150,
+            "gps_time": "2024-08-09T12:34:56Z"
+        },
+        "LRF": {
+            "distance": 200.5,
+            "latitude_or_X": 37.7749,
+            "longitude_or_Y": 122.4194,
+            "altitude_or_Z": 150
+        },
+        "bounding_boxes": []
+    },{
+        "timestamp": "2024-08-09T12:34:56Z",
+        "deviceId": "e17fewn12sdfe3sd3dsv",
+        "device_type": "drone",
+        "currentHistoryYn": "Y",
+        "deviceStatus": "01",
+        "location": "37°21'04\"N 127°49'50\"E",
+        "rawFile": {
+            "raw_file_id": "img123",
+            "raw_file_seq": 1,
+            "raw_file_path": "/path/to/image",
+            "raw_file_name": "image_name.jpg",
+            "raw_file_size": 12345,
+            "raw_file_ext": ".jpg",
+            "ext_type": "JPEG",
+            "original_file_path": "/path/to/original_image",
+            "original_file_name": "original_image_name.jpg",
+            "register_id": "user123",
+            "register_datetime": "2024-08-09T12:34:56Z"
+        },
+        "GPS": {
+            "latitude_or_X": 37.7749,
+            "longitude_or_Y": 122.4194,
+            "altitude_or_Z": 150,
+            "gps_time": "2024-08-09T12:34:56Z"
+        },
+        "LRF": {
+            "distance": 200.5,
+            "latitude_or_X": 37.7749,
+            "longitude_or_Y": 122.4194,
+            "altitude_or_Z": 150
+        },
+        "bounding_boxes": []
+    },{
+        "timestamp": "2024-08-09T12:34:56Z",
+        "deviceId": "e17fewn12sdfe3sd3dsv",
+        "device_type": "drone",
+        "currentHistoryYn": "Y",
+        "deviceStatus": "01",
+        "location": "37°21'03\"N 127°49'44\"E",
+        "rawFile": {
+            "raw_file_id": "img123",
+            "raw_file_seq": 1,
+            "raw_file_path": "/path/to/image",
+            "raw_file_name": "image_name.jpg",
+            "raw_file_size": 12345,
+            "raw_file_ext": ".jpg",
+            "ext_type": "JPEG",
+            "original_file_path": "/path/to/original_image",
+            "original_file_name": "original_image_name.jpg",
+            "register_id": "user123",
+            "register_datetime": "2024-08-09T12:34:56Z"
+        },
+        "GPS": {
+            "latitude_or_X": 37.7749,
+            "longitude_or_Y": 122.4194,
+            "altitude_or_Z": 150,
+            "gps_time": "2024-08-09T12:34:56Z"
+        },
+        "LRF": {
+            "distance": 200.5,
+            "latitude_or_X": 37.7749,
+            "longitude_or_Y": 122.4194,
+            "altitude_or_Z": 150
+        },
+        "bounding_boxes": []
+    },{
+        "timestamp": "2024-08-09T12:34:56Z",
+        "deviceId": "e17fewn12sdfe3sd3dsv",
+        "device_type": "drone",
+        "currentHistoryYn": "Y",
+        "deviceStatus": "01",
+        "location": "37°21'03\"N 127°49'44\"E",
+        "rawFile": {
+            "raw_file_id": "img123",
+            "raw_file_seq": 1,
+            "raw_file_path": "/path/to/image",
+            "raw_file_name": "image_name.jpg",
+            "raw_file_size": 12345,
+            "raw_file_ext": ".jpg",
+            "ext_type": "JPEG",
+            "original_file_path": "/path/to/original_image",
+            "original_file_name": "original_image_name.jpg",
+            "register_id": "user123",
+            "register_datetime": "2024-08-09T12:34:56Z"
+        },
+        "GPS": {
+            "latitude_or_X": 37.7749,
+            "longitude_or_Y": 122.4194,
+            "altitude_or_Z": 150,
+            "gps_time": "2024-08-09T12:34:56Z"
+        },
+        "LRF": {
+            "distance": 200.5,
+            "latitude_or_X": 37.7749,
+            "longitude_or_Y": 122.4194,
+            "altitude_or_Z": 150
+        },
+        "bounding_boxes": []
+    },{
+        "timestamp": "2024-08-09T12:34:56Z",
+        "deviceId": "e17fewn12sdfe3sd3dsv",
+        "device_type": "drone",
+        "currentHistoryYn": "Y",
+        "deviceStatus": "01",
+        "location": "37°20'59\"N 127°49'48\"E",
+        "rawFile": {
+            "raw_file_id": "img123",
+            "raw_file_seq": 1,
+            "raw_file_path": "/path/to/image",
+            "raw_file_name": "image_name.jpg",
+            "raw_file_size": 12345,
+            "raw_file_ext": ".jpg",
+            "ext_type": "JPEG",
+            "original_file_path": "/path/to/original_image",
+            "original_file_name": "original_image_name.jpg",
+            "register_id": "user123",
+            "register_datetime": "2024-08-09T12:34:56Z"
+        },
+        "GPS": {
+            "latitude_or_X": 37.7749,
+            "longitude_or_Y": 122.4194,
+            "altitude_or_Z": 150,
+            "gps_time": "2024-08-09T12:34:56Z"
+        },
+        "LRF": {
+            "distance": 200.5,
+            "latitude_or_X": 37.7749,
+            "longitude_or_Y": 122.4194,
+            "altitude_or_Z": 150
+        },
+        "bounding_boxes": []
+    },{
+        "timestamp": "2024-08-09T12:34:56Z",
+        "deviceId": "e17fewn12sdfe3sd3dsv",
+        "device_type": "drone",
+        "currentHistoryYn": "Y",
+        "deviceStatus": "01",
+        "location": "37°20'53\"N 127°49'50\"E",
+        "rawFile": {
+            "raw_file_id": "img123",
+            "raw_file_seq": 1,
+            "raw_file_path": "/path/to/image",
+            "raw_file_name": "image_name.jpg",
+            "raw_file_size": 12345,
+            "raw_file_ext": ".jpg",
+            "ext_type": "JPEG",
+            "original_file_path": "/path/to/original_image",
+            "original_file_name": "original_image_name.jpg",
+            "register_id": "user123",
+            "register_datetime": "2024-08-09T12:34:56Z"
+        },
+        "GPS": {
+            "latitude_or_X": 37.7749,
+            "longitude_or_Y": 122.4194,
+            "altitude_or_Z": 150,
+            "gps_time": "2024-08-09T12:34:56Z"
+        },
+        "LRF": {
+            "distance": 200.5,
+            "latitude_or_X": 37.7749,
+            "longitude_or_Y": 122.4194,
+            "altitude_or_Z": 150
+        },
+        "bounding_boxes": []
+    }]
 </script>
 
 </body>
