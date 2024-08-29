@@ -380,7 +380,7 @@
 
         // Edge 또는 Main 선택 여부에 따라 loginStatusAPI 호출
         const isEdgeTest = true; // EdgeTest 인지 여부를 true로 설정
-        loginStatusAPI(isEdgeTest , selectElement.value);
+        loginStatusAPI(logId, isEdgeTest, selectElement.value);
 
         // 중단 버튼 클릭 이벤트 추가
         button.addEventListener("click", function() {
@@ -444,7 +444,7 @@
 
         // Edge 또는 Main 선택 여부에 따라 loginStatusAPI 호출
         const isEdgeTest = false; // EdgeTest 인지 여부를 true로 설정
-        loginStatusAPI(isEdgeTest, selectElement.value);
+        loginStatusAPI(logId, isEdgeTest, selectElement.value);
 
         // 새로운 이벤트 리스너 추가
         button.addEventListener("click", function() {
@@ -517,7 +517,7 @@
 
         // Edge 또는 Main 선택 여부에 따라 loginStatusAPI 호출
         const isEdgeTest = false; // EdgeTest 인지 여부를 true로 설정
-        logoutAPI(isEdgeTest, selectElement.value);
+        logoutAPI(logId, isEdgeTest, selectElement.value);
     }
 
     function endEdgeScenario(button) {
@@ -549,7 +549,7 @@
 
         // Edge 또는 Main 선택 여부에 따라 loginStatusAPI 호출
         const isEdgeTest = true; // EdgeTest 인지 여부를 true로 설정
-        logoutAPI(isEdgeTest, selectElement.value);
+        logoutAPI(logId,isEdgeTest, selectElement.value);
     }
 
 </script>
@@ -576,7 +576,7 @@
 
 <script>
     // 1. 선택한 Edge 로그인 전송
-    function loginStatusAPI(edgeTestClicked, edgeType) {
+    function loginStatusAPI(logId, edgeTestClicked, edgeType) {
         // 기본 URL 설정
         let baseUrl = document.getElementById('localAddress').value; // 로컬 주소 입력 값 가져오기
 
@@ -640,10 +640,13 @@
                 return response.json();
             })
             .then(data => {
+                logMessage(logId,'------------------------------------------');
+                logMessage(logId,'Login status sent:', data);
+                logMessage(logId,'------------------------------------------');
 
                 // 로그인 완료 후에 시나리오 시작 함수 호출
                 if (data.result) {
-                    startScenario(edgeType);
+                    startScenario(logId, edgeType);
                 } else {
                     console.log("execution failed");
                 }
@@ -654,7 +657,7 @@
     }
 
     // 2. 시나리오 데이터 전송 시간 : 6초 간격
-    async function startScenario(edgeType) {
+    async function startScenario(logId, edgeType) {
         // 기본 URL 설정
         let baseUrl = document.getElementById('localAddress').value || 'https://default-server-url.com';
 
@@ -688,21 +691,21 @@
 
                 // 로그 처리
                 if (!data.result) {
-                    logMessage('------------------------------------------');
-                    logMessage('Error: Operation failed with result false.');
-                    logMessage('------------------------------------------');
+                    logMessage(logId, '------------------------------------------');
+                    logMessage(logId, 'Error: Operation failed with result false.');
+                    logMessage(logId, '------------------------------------------');
                 }
                 if (data.authError) {
-                    logMessage('------------------------------------------');
-                    logMessage('Authorization error occurred.');
-                    logMessage('------------------------------------------');
+                    logMessage(logId, '------------------------------------------');
+                    logMessage(logId, 'Authorization error occurred.');
+                    logMessage(logId, '------------------------------------------');
                 }
             } catch (error) {
                 console.error('There was a problem with the fetch operation:', error);
                 if (data.authError) {
-                    logMessage('------------------------------------------');
-                    logMessage('There was a problem with the fetch operation:', error);
-                    logMessage('------------------------------------------');
+                    logMessage(logId, '------------------------------------------');
+                    logMessage(logId, 'There was a problem with the fetch operation:', error);
+                    logMessage(logId, '------------------------------------------');
                 }
             }
         }
@@ -711,10 +714,10 @@
         for (let i = 0; i < jsonData.length; i++) {
             await sendScenarioData(jsonData[i]);
             console.log(`Sent data for deviceId: ${jsonData[i].deviceId}`);
-            logMessage('------------------------------------------');
-            logMessage(`Sent data for deviceId: ${jsonData[i].deviceId}`);
-            logMessage(`Sent data for jsonData: ${jsonData[i]}`);
-            logMessage('------------------------------------------');
+            logMessage(logId, '------------------------------------------');
+            logMessage(logId, `Sent data for deviceId: ${jsonData[i].deviceId}`);
+            logMessage(logId, `Sent data for jsonData: ${jsonData[i]}`);
+            logMessage(logId, '------------------------------------------');
             await new Promise(resolve => setTimeout(resolve, 6000));  // 6초 대기
         }
 
@@ -724,7 +727,7 @@
     // 3. 시나리오 데이터 전송 중단
 
     // 4. 시나리오 데이터 전송 종료
-    function logoutAPI(edgeTestClicked, edgeType) {
+    function logoutAPI(logId,edgeTestClicked, edgeType) {
         // 기본 URL 설정
         let baseUrl = document.getElementById('localAddress').value; // 로컬 주소 입력 값 가져오기
 
@@ -784,16 +787,16 @@
                 return response.json();
             })
             .then(data => {
-                logMessage('------------------------------------------');
-                logMessage('Login status sent:', data);
-                logMessage('------------------------------------------');
+                logMessage(logId,'------------------------------------------');
+                logMessage(logId,'Login status sent:', data);
+                logMessage(logId,'------------------------------------------');
 
                 // 로그인 완료 후에 시나리오 시작 함수 호출
             })
             .catch(error => {
-                logMessage('------------------------------------------');
-                logMessage('There was a problem with the fetch operation:', error);
-                logMessage('------------------------------------------');
+                logMessage(logId,'------------------------------------------');
+                logMessage(logId,'There was a problem with the fetch operation:', error);
+                logMessage(logId,'------------------------------------------');
             });
     }
 
