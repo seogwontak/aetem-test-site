@@ -575,6 +575,9 @@
 </script>
 
 <script>
+    const now = new Date();
+    const formattedTime = now.toLocaleTimeString(); // 현재 시간을 'HH:MM:SS' 형식으로 출력
+
     // 1. 선택한 Edge 로그인 전송
     function loginStatusAPI(logId, edgeTestClicked, edgeType) {
         // 기본 URL 설정
@@ -641,7 +644,8 @@
             })
             .then(data => {
                 logMessage(logId,'------------------------------------------');
-                logMessage(logId,'Login status sent:', data);
+                logMessage(logId,'Current Time', `${formattedTime}`);
+                logMessage(logId,'Login status sent:', JSON.stringify(data));
                 logMessage(logId,'------------------------------------------');
 
                 // 로그인 완료 후에 시나리오 시작 함수 호출
@@ -652,7 +656,7 @@
                 }
             })
             .catch(error => {
-                console.error('There was a problem with the fetch operation:', error);
+                console.error('There was a problem with the fetch operation:', JSON.stringify(error));
             });
     }
 
@@ -692,21 +696,22 @@
                 // 로그 처리
                 if (!data.result) {
                     logMessage(logId, '------------------------------------------');
+                    logMessage(logId,'Current Time', `${formattedTime}`);
                     logMessage(logId, 'Error: Operation failed with result false.');
                     logMessage(logId, '------------------------------------------');
                 }
                 if (data.authError) {
                     logMessage(logId, '------------------------------------------');
+                    logMessage(logId,'Current Time', `${formattedTime}`);
                     logMessage(logId, 'Authorization error occurred.');
                     logMessage(logId, '------------------------------------------');
                 }
             } catch (error) {
-                console.error('There was a problem with the fetch operation:', error);
-                if (data.authError) {
-                    logMessage(logId, '------------------------------------------');
-                    logMessage(logId, 'There was a problem with the fetch operation:', error);
-                    logMessage(logId, '------------------------------------------');
-                }
+                console.error('There was a problem with the fetch operation:', JSON.stringify(error));
+                logMessage(logId, '------------------------------------------');
+                logMessage(logId,'Current Time', `${formattedTime}`);
+                logMessage(logId, 'There was a problem with the fetch operation:', JSON.stringify(error));
+                logMessage(logId, '------------------------------------------');
             }
         }
 
@@ -715,8 +720,9 @@
             await sendScenarioData(jsonData[i]);
             console.log(`Sent data for deviceId: ${jsonData[i].deviceId}`);
             logMessage(logId, '------------------------------------------');
+            logMessage(logId,'Current Time', `${formattedTime}`);
             logMessage(logId, `Sent data for deviceId: ${jsonData[i].deviceId}`);
-            logMessage(logId, `Sent data for jsonData: ${jsonData[i]}`);
+            logMessage(logId, `Sent data for jsonData:` +  JSON.stringify(`${jsonData[i]}`) + ')');
             logMessage(logId, '------------------------------------------');
             await new Promise(resolve => setTimeout(resolve, 6000));  // 6초 대기
         }
@@ -788,14 +794,16 @@
             })
             .then(data => {
                 logMessage(logId,'------------------------------------------');
-                logMessage(logId,'Login status sent:', data);
+                logMessage(logId,'Current Time', `${formattedTime}`);
+                logMessage(logId,'Login status sent:', JSON.stringify(data));
                 logMessage(logId,'------------------------------------------');
 
                 // 로그인 완료 후에 시나리오 시작 함수 호출
             })
             .catch(error => {
                 logMessage(logId,'------------------------------------------');
-                logMessage(logId,'There was a problem with the fetch operation:', error);
+                logMessage(logId,'Current Time', `${formattedTime}`);
+                logMessage(logId,'There was a problem with the fetch operation:', JSON.stringify(error));
                 logMessage(logId,'------------------------------------------');
             });
     }
