@@ -685,9 +685,25 @@
                 }
 
                 const data = await response.json();
-                console.log('Scenario data sent:', data);
+
+                // 로그 처리
+                if (!data.result) {
+                    logMessage('------------------------------------------');
+                    logMessage('Error: Operation failed with result false.');
+                    logMessage('------------------------------------------');
+                }
+                if (data.authError) {
+                    logMessage('------------------------------------------');
+                    logMessage('Authorization error occurred.');
+                    logMessage('------------------------------------------');
+                }
             } catch (error) {
                 console.error('There was a problem with the fetch operation:', error);
+                if (data.authError) {
+                    logMessage('------------------------------------------');
+                    logMessage('There was a problem with the fetch operation:', error);
+                    logMessage('------------------------------------------');
+                }
             }
         }
 
@@ -695,6 +711,10 @@
         for (let i = 0; i < jsonData.length; i++) {
             await sendScenarioData(jsonData[i]);
             console.log(`Sent data for deviceId: ${jsonData[i].deviceId}`);
+            logMessage('------------------------------------------');
+            logMessage(`Sent data for deviceId: ${jsonData[i].deviceId}`);
+            logMessage(`Sent data for jsonData: ${jsonData[i]}`);
+            logMessage('------------------------------------------');
             await new Promise(resolve => setTimeout(resolve, 6000));  // 6초 대기
         }
 
@@ -764,11 +784,16 @@
                 return response.json();
             })
             .then(data => {
-                console.log('Login status sent:', data);
+                logMessage('------------------------------------------');
+                logMessage('Login status sent:', data);
+                logMessage('------------------------------------------');
+
                 // 로그인 완료 후에 시나리오 시작 함수 호출
             })
             .catch(error => {
-                console.error('There was a problem with the fetch operation:', error);
+                logMessage('------------------------------------------');
+                logMessage('There was a problem with the fetch operation:', error);
+                logMessage('------------------------------------------');
             });
     }
 
